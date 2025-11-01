@@ -2,7 +2,7 @@
 <img src="./ministar.svg">
 </div>
 
-<h1 font-size="7vh";text-align="center">Ministar</h1>
+<h1 text-align="center">Ministar</h1>
 <p text-align="center">一个超轻量级AI模型+从零开始自己训练!🚀</p>
 
 > [!NOTE]
