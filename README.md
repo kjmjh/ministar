@@ -83,7 +83,7 @@ pip install -r requirements.txt
 3.开始训练
 
 ```
-git clone https://github.com/kjmjh/ministar
+git clone https://github.com/kjmjh/ministar.git
 
 (其实你之前已经git过了)
 ```
