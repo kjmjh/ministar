@@ -2,8 +2,8 @@
 <img src="./ministar.svg">
 </div>
 
-<h1 style="font-size:7vh;text-align:center">Ministar</h1>
-<p style="text-align:center">一个超轻量级AI模型+从零开始自己训练!🚀</p>
+<h1 font-size="7vh";text-align="center">Ministar</h1>
+<p text-align="center">一个超轻量级AI模型+从零开始自己训练!🚀</p>
 
 > [!NOTE]
 > 本教程意在用浅显易懂的语言教使用者快速打造自己的AI模型，如有不对请指出
