@@ -1,8 +1,5 @@
 <div align="center">
-<img src="./ministar.svg">
-</div>
-
-<div align="center">
+<img src="./ministar.svg"height="200px"width="200px"></img>
 <h1>Ministar</h1>
 <p>一个超轻量级AI模型+从零开始自己训练!🚀</p>
 </div>

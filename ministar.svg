@@ -1,0 +1,32 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%" stop-color="#0A0E17"/>
+    <stop offset="100%" stop-color="#1A1F2E"/>
+  </linearGradient>
+  
+  <linearGradient id="starGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%" stop-color="#4F46E5"/>
+    <stop offset="50%" stop-color="#7C3AED"/>
+    <stop offset="100%" stop-color="#EC4899"/>
+  </linearGradient>
+</defs>
+
+<rect width="1024" height="1024" fill="url(#bgGradient)" rx="128"/>
+
+<!-- 主星形轮廓 -->
+<path d="M512 256L614 448L824 448L662 576L724 786L512 672L300 786L362 576L200 448L410 448L512 256Z" 
+      stroke="url(#starGradient)" 
+      stroke-width="24" 
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      fill="none"/>
+
+<!-- 内部装饰线条 -->
+<path d="M512 352L572 476L704 476L596 564L636 696L512 616L388 696L428 564L320 476L452 476L512 352Z" 
+      stroke="url(#starGradient)" 
+      stroke-width="12" 
+      stroke-linecap="round"
+      opacity="0.6"
+      fill="none"/>
+</svg>
