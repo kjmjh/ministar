@@ -1,5 +1,5 @@
-<div align="center"height="100px"width="100px">
-<img src="./ministar.svg">
+<div align="center">
+<img src="./ministar.svg"width="100px"height="100px">
 </div>
 
 <h1 font-size="7vh"align="center">Ministar</h1>
