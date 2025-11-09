@@ -1,11 +1,14 @@
 <div align="center">
-<img src="./ministar.svg"height="200px"width="200px"></img>
-<h1>Ministar</h1>
-<p>一个超轻量级AI模型+从零开始自己训练!🚀</p>
+<img src="./ministar.svg">
 </div>
+
+<h1 style="font-size:7vh;text-align:center">Ministar</h1>
+<p style="text-align:center">一个超轻量级AI模型+从零开始自己训练!🚀</p>
 
 > [!NOTE]
 > 本教程意在用浅显易懂的语言教使用者快速打造自己的AI模型，如有不对请指出
+
+> 截至目前(2025/11/9)，最新的ministarAI模型已经可以生成连续的短句，并成功在移动端部署，但经常答非所问。
 
 ## 快速使用
 
@@ -54,7 +57,7 @@ streamlit run web_chat.py
 
 🎉恭喜你成功运行ministar!
 
-> 移动设备使用正在探索中...
+> 截至2025/11/9，ministar已经成功在移动端部署。文档尽请期待
 
 ## 接下来:从零开始自己训练
 
@@ -83,7 +86,7 @@ pip install -r requirements.txt
 3.开始训练
 
 ```
-git clone https://github.com/kjmjh/ministar.git
+git clone https://github.com/kjmjh/ministar
 
 (其实你之前已经git过了)
 ```
@@ -94,6 +97,8 @@ python train_ministar.py
 你可以自行在代码里更改名称，大约在132,164,168行(train_ministar.py)。
 模型权重默认保存为ministar.pth,你可以在大约186,188,212,213行(train_ministar.py)里根据你的实际情况更改。并且在chat_ministar里也要改为一样的!
 ```
+
+> 新增newtrain_ministar.py，用于小模型向大模型(gpt5-nano)学习。
 
 > 其它特别参数请查看代码，那里我尽量写了详细注释
 
@@ -132,3 +137,4 @@ python safe_ministar.py
 请遵守，谢谢。
 
 > *作者还只是一个初中生呢，能不能点个star支持一下ヽ(*⌒∇⌒*)ﾉ*
+

@@ -3,6 +3,12 @@ import os
 import torch
 from transformers import PreTrainedTokenizerFast
 
+try:
+    from safetensors.torch import load_file
+    SAFETENSORS_AVAILABLE = True
+except ImportError:
+    SAFETENSORS_AVAILABLE = False
+
 #模型配置（注:必须与训练时一致，在使用前请对照train_ministar.py:))(())
 class MiniStarConfig:
     def __init__(self):
@@ -11,7 +17,7 @@ class MiniStarConfig:
         self.n_head = 2
         self.n_layer = 2
         self.block_size = 256
-        self.dropout = 0.3
+        self.dropout = 0.1
         self.pad_token_id = 0
 
 import math
@@ -87,13 +93,23 @@ class MiniStar(torch.nn.Module):
         logits = self.head(x)
         return logits, None
 
-def main():
-    model_path = "ministar.pth"
+def main(): #以下文件名根据你的实际情况决定
+    model_path_pth = "ministar.pth"
+    model_path_safetensors = "model.safetensors"
     tokenizer_path = "ministar_tokenizer.json"
     
-    if not (os.path.exists(model_path) and os.path.exists(tokenizer_path)):
-        print(f"错误: 找不到模型文件 '{model_path}' 或 tokenizer '{tokenizer_path}'")
+    model_path = None
+    if os.path.exists(model_path_pth):
+        model_path = model_path_pth
+    elif os.path.exists(model_path_safetensors):
+        model_path = model_path_safetensors
+    else:
+        print(f"错误: 找不到模型文件 '{model_path_pth}' 或 '{model_path_safetensors}'")
         print("请先运行: python train_ministar.py")
+        return
+
+    if not os.path.exists(tokenizer_path):
+        print(f"错误: 找不到 tokenizer '{tokenizer_path}'")
         return
 
     tokenizer = PreTrainedTokenizerFast(
@@ -109,7 +125,16 @@ def main():
     config.pad_token_id = tokenizer.pad_token_id
     model = MiniStar(config)
     
-    model.load_state_dict(torch.load(model_path, map_location="cpu"))
+    if model_path.endswith(".safetensors"):
+        if not SAFETENSORS_AVAILABLE:
+            print("错误: 需要安装 safetensors 库以加载 .safetensors 文件，这很重要!")
+            print("运行: pip install safetensors")
+            return
+        state_dict = load_file(model_path, device="cpu")
+        model.load_state_dict(state_dict)
+    else:
+        model.load_state_dict(torch.load(model_path, map_location="cpu"))
+    
     model.eval()
     
     device = torch.device("cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
@@ -134,34 +159,38 @@ def main():
             print(" ministar: ", end="", flush=True)
             new_text_cache = ""  
         #好鸡肋
+            last_tokens = [] 
+            punctuation_run = 0 
             for _ in range(150):  
                 with torch.no_grad():
                     logits, _ = model(generated_ids)
-                    next_token_logits = logits[:, -1, :] / 0.5  
+                    next_token_logits = logits[:, -1, :] / 0.8  
+                    for token_id in last_tokens[-8:]:  
+                        next_token_logits[0, token_id] -= 1.5
+
                     probs = torch.nn.functional.softmax(next_token_logits, dim=-1)
                     next_token = torch.multinomial(probs, num_samples=1)
 
-                if next_token.item() == tokenizer.eos_token_id:
+                token_id = next_token.item()
+                if token_id == tokenizer.eos_token_id:
+                    break
+                decoded = tokenizer.decode([token_id], skip_special_tokens=True)
+                if decoded in "：。（）【】、，；！？":#用于连续标点检测
+                    punctuation_run += 1
+                else:
+                    punctuation_run = 0
+                if punctuation_run > 6:  #这里的说明:改进train_ministar.py后，AI更加胡言乱语，所以防止AI生成连续6个以上的字符，并打断
                     break
 
                 generated_ids = torch.cat([generated_ids, next_token], dim=1)
+                last_tokens.append(token_id)
 
-                new_token_id = next_token.item()
-                if new_token_id in [tokenizer.pad_token_id, tokenizer.bos_token_id]:
+                if token_id in [tokenizer.pad_token_id, tokenizer.bos_token_id]:
                     continue
 
-                new_token_text = tokenizer.decode([new_token_id], skip_special_tokens=True)
-                
-                if new_token_text.startswith("Ġ"):
-                    if new_text_cache:
-                        print(new_text_cache, end="", flush=True)
-                        new_text_cache = ""
-                    print(new_token_text[1:], end="", flush=True) 
-                else:
-                    new_text_cache += new_token_text
+                new_token_text = tokenizer.decode([token_id], skip_special_tokens=True)
+                print(new_token_text, end="", flush=True)
 
-            if new_text_cache:
-                print(new_text_cache, end="", flush=True)
             print() 
 
         except KeyboardInterrupt:

@@ -157,7 +157,7 @@ class AlpacaDataset(Dataset):
         else:
             tokens = tokens[:self.block_size]
         return tokens
-        
+
         #这里不会写了，用AI吧:P
 
 def main():
@@ -205,7 +205,7 @@ def main():
             torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
             optimizer.step()
             total_loss += loss.item()
-        
+
         avg_loss = total_loss / len(dataloader)
         print(f"Epoch {epoch+1} 完成,，平均 Loss: {avg_loss:.4f}")
 
